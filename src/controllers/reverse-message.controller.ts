@@ -6,6 +6,8 @@ import {
   get,
   response
 } from '@loopback/rest';
+import { RestserviceDataSource  } from '../datasources';
+import { Helloworld,Message  } from '../services';
 
 const REVERSE_RESPONSE: ResponseObject = {
   description: 'Ping Response',
@@ -24,17 +26,26 @@ const REVERSE_RESPONSE: ResponseObject = {
 };
 
 
-export class ReverseMessageController {
-  constructor(@inject(RestBindings.Http.REQUEST) private req: Request) {}
 
-  // Map to `GET /ping`
+export class ReverseMessageController {
+  constructor(@inject(RestBindings.Http.REQUEST) private req: Request, @inject('services.Helloworld')
+  protected helloWorldService: Helloworld) {}
+  
+  //get third party service
+  @get('/ping')
+  async getMessage(): Promise<Message> {
+    return this.helloWorldService.getPing();
+  }
+
+   
   @get('/reverse')
   @response(200, REVERSE_RESPONSE)
-  reverse(): object {
+  async reverse(): Promise<object> {
+    let msgJson: Message = await this.getMessage();
     // Reply with a greeting, the current time, the url, and request headers
-    let revStr:String = this.reverseString("Hello world");
+    let revStr:String = this.reverseString(msgJson.message);
     return {
-      id: "1",
+      id: msgJson.id,
       message: revStr
     };
   }
