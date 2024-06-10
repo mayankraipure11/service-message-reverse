@@ -27,7 +27,7 @@
     "test:dev": "lb-mocha --allow-console-logs dist/__tests__/**/*.js && npm run posttest",
     "docker:build": "docker build -t service-message-reverse .",
     "docker:run": "docker run -p 8085:3000 -d service-message-reverse",
-    "docker:tag": "docker tag service-message mayankraipure/service-message-reverse:latest",
+    "docker:tag": "docker tag service-message-reverse mayankraipure/service-message-reverse:latest",
     "docker:push": "docker push mayankraipure/service-message-reverse:latest",
     "premigrate": "npm run build",
     "migrate": "node ./dist/migrate",
